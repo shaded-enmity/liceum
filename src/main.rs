@@ -15,6 +15,7 @@ use std::path::Path;
 use std::sync::{Arc, mpsc};
 use std::hash::Hash;
 use std::process::Command;
+use std::collections::hash_map::Entry::{Occupied, Vacant};
 
 use getopts::Options;
 use rustc_serialize::json;
@@ -40,11 +41,12 @@ impl<K: Eq + Hash, V> OneToMany<K, V> for HashMap<K, Vec<V>> {
     /// If `key` is not present insert the key with a vector containing the `value`
     /// whereas if `key` is already present then push the `value` into the vector
     fn insert_one(&mut self, key: K, value: V) {
-        if self.contains_key(&key) {
-            self.get_mut(&key).unwrap().push(value);
-        } else {
-            self.insert(key, vec![value]);
-        }
+        match self.entry(key) {
+            Vacant(entry) => {
+                entry.insert(vec![value]);
+            }
+            Occupied(mut entry) => entry.get_mut().push(value),
+        };
     }
 }
 
