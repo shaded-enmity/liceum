@@ -140,12 +140,12 @@ fn get_ngrams(from: &str, n: usize) -> NGramVec {
             ""), 
         " ");
     // Get rid of all empty chars
-    let filtered = sanitized.split(" ")
+    let filtered = sanitized.split(' ')
                             .filter(|x| *x != "")
                             .collect::<Vec<&str>>()
                             .join(" ");
     // Create `n` iterators splitting the string by the space character
-    let mut iterators = vec![filtered.split(" "); n];
+    let mut iterators = vec![filtered.split(' '); n];
 
     // Skew the iterators by their position such as:
     //
@@ -156,11 +156,10 @@ fn get_ngrams(from: &str, n: usize) -> NGramVec {
     //
     // Reading from each iterator will then yield next n-gram
     let mut cnt = 0;
-    for iterator in iterators.iter_mut() {
+    for iterator in &mut iterators {
         for _ in 0..cnt {
             let n = iterator.next()
-                            .map(|_| true)
-                            .unwrap_or(false);
+                            .map_or(false, |_| true);
             if !n {
                 return Vec::new();
             }
@@ -172,7 +171,7 @@ fn get_ngrams(from: &str, n: usize) -> NGramVec {
     let mut grams: NGramVec = Vec::new();
     let mut ng: Vec<&str> = Vec::new();
     'main: loop {
-        for iterator in iterators.iter_mut() {
+        for iterator in &mut iterators {
             if let Some(item) = iterator.next() {
                 ng.push(item);
             } else {
@@ -227,7 +226,7 @@ fn load_data(input: &JsonInMap) -> Arc<InputVector> {
     for (k, v) in input {
         let mut ngrams: NGramVec = Vec::new();
         for ngram in &v.ngrams {
-            ngrams.push(NGram::new(&ngram));
+            ngrams.push(NGram::new(ngram));
         }
 
         let data = InData {
@@ -383,8 +382,7 @@ fn generate_corpuses(data_dir: &str, verbose: bool) -> String {
 fn is_hidden(entry: &DirEntry) -> bool {
     entry.path()
          .to_str()
-         .map(|s| s.contains("/."))
-         .unwrap_or(false)
+         .map_or(false, |s| s.contains("/."))
 }
 
 /// Predicate determining whether the path is a text file or directory
@@ -496,7 +494,7 @@ fn main() {
     // ssdeep::compare("license_hashes", "../docker-hica/", 75);
 
     if matches.opt_present("h") {
-        print_usage(0, &program, &opts);
+        print_usage(0, program, &opts);
     }
 
     let verbose = matches.opt_present("v");
@@ -522,7 +520,7 @@ fn main() {
             panic!("Empty check data");
         }
 
-        if matches.free.len() == 0 {
+        if matches.free.is_empty() {
             panic!("Nothing to check");
         }
 
@@ -537,7 +535,7 @@ fn main() {
 
         let output = generate_corpuses(&gen_data, verbose);
         let ngrams = Path::new("cache/").join(NGRAMS_FILE);
-        write_file(&ngrams.to_str().unwrap(), &output).ok();
+        write_file(ngrams.to_str().unwrap(), &output).ok();
 
         let ssdeep = ssdeep::compute_directory(&gen_data);
         let hashes = Path::new("cache/").join(SSDEEP_HASHES);
