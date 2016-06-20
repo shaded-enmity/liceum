@@ -13,12 +13,10 @@ pub struct CompareResult {
 /// Compute ssdeep hash, recursively, for all files in `dir` directory
 /// and return a single string with one hash per line.
 pub fn compute_directory(dir: &str) -> String {
-    let result = match Command::new("ssdeep").arg("-br").arg(dir).output() {
+    match Command::new("ssdeep").arg("-br").arg(dir).output() {
         Ok(output) => String::from_utf8_lossy(&output.stdout).into_owned(),
         Err(_) => String::new(), 
-    };
-
-    result
+    }
 }
 
 /// Compare ssdeep hashes from `data_file`, recursively, against all files
