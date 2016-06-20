@@ -16,13 +16,14 @@ impl<T: Clone + Eq + Hash> HashableVec<T> {
 
 impl<T: Clone + Eq + Hash> Hash for HashableVec<T> {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        for item in self.obj.iter() {
+        for item in &self.obj {
             item.hash(state)
         }
     }
 }
 
-/// Holds NGram of type `T` and size `size`
+/// Holds `NGram` of type `T` and size `size`
+// TODO: hash^eq
 #[derive(Hash, Eq, PartialEq, Debug, RustcDecodable, RustcEncodable)]
 pub struct NGram<T: Clone + Eq + Hash> {
     pub size: usize,
@@ -33,7 +34,7 @@ impl<T: Clone + Eq + Hash> NGram<T> {
     pub fn new(items: &[T]) -> NGram<T> {
         NGram {
             size: items.len(),
-            elements: HashableVec::new(items.iter().map(|x| x.clone())),
+            elements: HashableVec::new(items.iter().cloned()),
         }
     }
 }
