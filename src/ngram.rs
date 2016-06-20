@@ -1,3 +1,4 @@
+#![allow(unknown_lints, derive_hash_xor_eq)]
 use std::iter::{FromIterator, IntoIterator};
 use std::hash::{Hash, Hasher};
 
