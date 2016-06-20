@@ -1,0 +1,12 @@
+[package]
+name = "liceum"
+version = "0.1.0"
+authors = ["shaded-enmity <the.arul@gmail.com>"]
+
+[dependencies]
+regex = "0.1.71"
+rustc-serialize = "0.3.19"
+threadpool = "1.0"
+getopts = "0.2"
+csv = "0.14.4"
+walkdir = "0.1.5"
