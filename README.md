@@ -135,4 +135,4 @@ The level information is finally used by the search algorithm to pick the best c
 
 ### License
 
-GPL-3.0
+GPL-3.0 
