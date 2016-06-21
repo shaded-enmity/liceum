@@ -1,3 +1,6 @@
+[![Travis branch](https://travis-ci.org/shaded-enmity/liceum.svg?branch=master)](https://travis-ci.org/shaded-enmity/liceum)
+[![Clippy Linting Result](https://clippy.bashy.io/github/shaded-enmity/liceum/master/badge.svg)](https://clippy.bashy.io/github/shaded-enmity/liceum/master/log)
+
 # Liceum
 Advanced license detector written in Rust
 
