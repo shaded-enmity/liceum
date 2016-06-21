@@ -1,0 +1,13 @@
+sudo: required
+
+services:
+ - docker
+
+before_install:
+ - sudo docker pull fedora:23
+
+script:
+  - sudo docker run --rm=true -v `pwd`:/src/:z fedora:23 bash -c "dnf install -y llvm clang redhat-rpm-config tar file {check,clang,zlib}-devel which && (curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- --disable-sudo) && cd /src && cargo build"
+
+notifications:
+  email: false
